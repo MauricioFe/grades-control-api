@@ -109,13 +109,20 @@ router.get("/media/:sub/:type", async (req, res) => {
         }, 0);
 
         const average = sum / filter.length;
-        res.send({media: average});
+        res.send({ media: average });
     } catch (error) {
         console.log(error)
     }
 });
-router.get("/media/:sub/:type", async (req, res) =>{
-    
+router.get("/bestGrade/:sub/:type", async (req, res) => {
+    try {
+        const data = JSON.parse(await readFile(global.fileName));
+        const filter = data.grades.filter(grade => grade.subject === req.params.sub && grade.type === req.params.type)
+        const sort = filter.sort((a, b) => b.value - a.value);
+        res.send(sort.slice(0,3));
+    } catch (error) {
+        console.log(error)
+    }
 });
 
 export default router;
