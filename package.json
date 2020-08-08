@@ -1,0 +1,24 @@
+{
+  "name": "grades-control-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MauricioFe/grades-control-api.git"
+  },
+  "keywords": [],
+  "author": "Mauricio Lacerda",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/MauricioFe/grades-control-api/issues"
+  },
+  "homepage": "https://github.com/MauricioFe/grades-control-api#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
