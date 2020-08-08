@@ -98,16 +98,24 @@ router.get("/somaNota/:stud/:sub", async (req, res) => {
     }
 });
 
-router.get("/media/:sub/:type", async(req, res) =>{
+router.get("/media/:sub/:type", async (req, res) => {
     try {
         const data = JSON.parse(await readFile(global.fileName));
         const filter = data.grades.filter(grade => {
             return grade.subject === req.params.sub && grade.type === req.params.type;
         })
-        res.send(filter);
+        const sum = filter.reduce((accumulator, current) => {
+            return accumulator + current.value;
+        }, 0);
+
+        const average = sum / filter.length;
+        res.send({media: average});
     } catch (error) {
         console.log(error)
     }
-})
+});
+router.get("/media/:sub/:type", async (req, res) =>{
+    
+});
 
 export default router;
