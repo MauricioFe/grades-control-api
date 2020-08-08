@@ -18,6 +18,7 @@ router.post("/", async (req, res) => {
             student: grade.student,
             subject: grade.subject,
             type: grade.type,
+            value: grade.value,
             timestamp: new Date
         };
         data.grades.push(grade);
@@ -103,7 +104,7 @@ router.get("/media/:sub/:type", async (req, res) => {
         const data = JSON.parse(await readFile(global.fileName));
         const filter = data.grades.filter(grade => {
             return grade.subject === req.params.sub && grade.type === req.params.type;
-        })
+        });
         const sum = filter.reduce((accumulator, current) => {
             return accumulator + current.value;
         }, 0);
@@ -117,7 +118,7 @@ router.get("/media/:sub/:type", async (req, res) => {
 router.get("/bestGrade/:sub/:type", async (req, res) => {
     try {
         const data = JSON.parse(await readFile(global.fileName));
-        const filter = data.grades.filter(grade => grade.subject === req.params.sub && grade.type === req.params.type)
+        const filter = data.grades.filter(grade => grade.subject === req.params.sub && grade.type === req.params.type);
         const sort = filter.sort((a, b) => b.value - a.value);
         res.send(sort.slice(0,3));
     } catch (error) {
