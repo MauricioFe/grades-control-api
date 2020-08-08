@@ -1,6 +1,5 @@
 import express from "express";
 import { promises as fs } from "fs";
-import { timeStamp } from "console";
 const { readFile, writeFile } = fs;
 
 const router = express.Router();
@@ -72,9 +71,43 @@ router.delete("/:id", async (req, res) => {
         await writeFile(global.fileName, JSON.stringify(data, null, 2))
         res.end();
     } catch (error) {
+        console.log(error);
+    }
+});
+
+router.get("/:id", async (req, res) => {
+    try {
+        const data = JSON.parse(await readFile(global.fileName));
+        const grade = data.grades.find(g => g.id === parseInt(req.params.id));
+        res.send(grade);
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+router.get("/somaNota/:stud/:sub", async (req, res) => {
+    try {
+        const data = JSON.parse(await readFile(global.fileName));
+        const filter = data.grades.filter(grade => {
+            return grade.student === req.params.stud && grade.subject === req.params.sub;
+        });
+        const sum = filter.reduce((accumulator, current) => { return accumulator + current.value }, 0);
+        res.send({ total: sum })
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+router.get("/media/:sub/:type", async(req, res) =>{
+    try {
+        const data = JSON.parse(await readFile(global.fileName));
+        const filter = data.grades.filter(grade => {
+            return grade.subject === req.params.sub && grade.type === req.params.type;
+        })
+        res.send(filter);
+    } catch (error) {
         console.log(error)
     }
-    
-});
+})
 
 export default router;
