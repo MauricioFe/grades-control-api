@@ -47,9 +47,15 @@ async function editarGrades(grade) {
     return grade;
 }
 
-async function getGradesById(id) {
+async function deleteGrades(id) {
     const data = JSON.parse(await readFile(global.fileName));
     data.grades = data.grades.filter(grade => grade.id !== parseInt(id));
     await writeFile(global.fileName, JSON.stringify(data, null, 2))
 }
-export { inserirGrades, getGrades, editarGrades, getGradesById }
+
+async function getGradeById(id){
+    const data = JSON.parse(await readFile(global.fileName));
+    const grade = data.grades.find(g => g.id === parseInt(id));
+    return grade;
+}
+export { inserirGrades, getGrades, editarGrades, deleteGrades, getGradeById }
