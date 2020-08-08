@@ -1,6 +1,6 @@
 import express from "express";
 import { promises as fs } from "fs";
-import {inserirGrades, getGrades, editarGrades} from "../Controllers/gradesController.js";
+import {inserirGrades, getGrades, editarGrades, getGradesById} from "../Controllers/gradesController.js";
 const { readFile, writeFile } = fs;
 
 const router = express.Router();
@@ -31,7 +31,7 @@ router.put("/", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
     try {
-        
+        getGradesById(req.params.id);
         res.end();
     } catch (error) {
         console.log(error);

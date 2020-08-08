@@ -1,7 +1,7 @@
 import { promises } from "fs";
 const { readFile, writeFile } = promises;
 
-async function inserirGrades(grade){
+async function inserirGrades(grade) {
     if (!grade.student || !grade.subject || !grade.type || !grade.value) {
         throw new Error("Preencha todos os campos como requerido");
     }
@@ -20,13 +20,13 @@ async function inserirGrades(grade){
     return grade;
 }
 
-async function getGrades(){
+async function getGrades() {
     const data = JSON.parse(await readFile(global.fileName));
     delete data.nextId
     return data;
 }
 
-async function editarGrades(grade){
+async function editarGrades(grade) {
     const data = JSON.parse(await readFile(global.fileName));
 
     const index = data.grades.findIndex(g => g.id === grade.id);
@@ -47,4 +47,9 @@ async function editarGrades(grade){
     return grade;
 }
 
-export {inserirGrades, getGrades, editarGrades, getGradesById}
+async function getGradesById(id) {
+    const data = JSON.parse(await readFile(global.fileName));
+    data.grades = data.grades.filter(grade => grade.id !== parseInt(id));
+    await writeFile(global.fileName, JSON.stringify(data, null, 2))
+}
+export { inserirGrades, getGrades, editarGrades, getGradesById }
