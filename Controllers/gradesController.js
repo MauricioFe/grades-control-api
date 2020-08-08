@@ -47,4 +47,4 @@ async function editarGrades(grade){
     return grade;
 }
 
-export {inserirGrades, getGrades}
+export {inserirGrades, getGrades, editarGrades, getGradesById}

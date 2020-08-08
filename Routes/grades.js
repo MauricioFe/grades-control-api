@@ -1,6 +1,6 @@
 import express from "express";
 import { promises as fs } from "fs";
-import {inserirGrades, getGrades} from "../Controllers/gradesController.js";
+import {inserirGrades, getGrades, editarGrades} from "../Controllers/gradesController.js";
 const { readFile, writeFile } = fs;
 
 const router = express.Router();
@@ -22,10 +22,8 @@ router.get("/", async (req, res) => {
 });
 
 router.put("/", async (req, res) => {
-    try {
-        let grade = req.body;
-       
-        res.send(grade);
+    try {      
+        res.send( await editarGrades(req.body));
     } catch (error) {
         console.log(error)
     }
@@ -33,9 +31,7 @@ router.put("/", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
     try {
-        const data = JSON.parse(await readFile(global.fileName));
-        data.grades = data.grades.filter(grade => grade.id !== parseInt(req.params.id));
-        await writeFile(global.fileName, JSON.stringify(data, null, 2))
+        
         res.end();
     } catch (error) {
         console.log(error);
