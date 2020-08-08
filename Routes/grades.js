@@ -1,6 +1,6 @@
 import express from "express";
 import { promises as fs } from "fs";
-import inserirGrades from "../Controllers/gradesController.js";
+import {inserirGrades, getGrades} from "../Controllers/gradesController.js";
 const { readFile, writeFile } = fs;
 
 const router = express.Router();
@@ -15,9 +15,7 @@ router.post("/", async (req, res) => {
 
 router.get("/", async (req, res) => {
     try {
-        const data = JSON.parse(await readFile(global.fileName));
-        delete data.nextId
-        res.send(data);
+        res.send(await getGrades());
     } catch (err) {
         console.log(err)
     }

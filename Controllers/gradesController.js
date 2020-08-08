@@ -20,6 +20,11 @@ async function inserirGrades(grade){
     return grade;
 }
 
+async function getGrades(){
+    const data = JSON.parse(await readFile(global.fileName));
+    delete data.nextId
+    return data;
+}
 
 async function editarGrades(grade){
     const data = JSON.parse(await readFile(global.fileName));
@@ -42,4 +47,4 @@ async function editarGrades(grade){
     return grade;
 }
 
-export  default inserirGrades
+export {inserirGrades, getGrades}
