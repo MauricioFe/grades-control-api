@@ -58,4 +58,32 @@ async function getGradeById(id){
     const grade = data.grades.find(g => g.id === parseInt(id));
     return grade;
 }
-export { inserirGrades, getGrades, editarGrades, deleteGrades, getGradeById }
+async function somar(studant, subject){
+    const data = JSON.parse(await readFile(global.fileName));
+    const filter = data.grades.filter(grade => {
+        return grade.student === studant && grade.subject === subject;
+    });
+    const sum = filter.reduce((accumulator, current) => { return accumulator + current.value }, 0);
+    return sum;
+}
+
+async function media(subject, type){
+    const data = JSON.parse(await readFile(global.fileName));
+    const filter = data.grades.filter(grade => {
+        return grade.subject === subject && grade.type === type;
+    });
+    const sum = filter.reduce((accumulator, current) => {
+        return accumulator + current.value;
+    }, 0);
+
+    const average = sum / filter.length;
+    return average;
+}
+
+async function bestGrade(subject, type){
+    const data = JSON.parse(await readFile(global.fileName));
+    const filter = data.grades.filter(grade => grade.subject === subject  && grade.type === type);
+    const sort = filter.sort((a, b) => b.value - a.value);
+    return sort;
+}
+export { inserirGrades, getGrades, editarGrades, deleteGrades, getGradeById, somar, media, bestGrade }

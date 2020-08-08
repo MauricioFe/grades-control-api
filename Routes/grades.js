@@ -1,6 +1,6 @@
 import express from "express";
 import { promises as fs } from "fs";
-import {inserirGrades, getGrades, editarGrades, deleteGrades, getGradeById} from "../Controllers/gradesController.js";
+import { inserirGrades, getGrades, editarGrades, deleteGrades, getGradeById, somar, media, bestGrade } from "../Controllers/gradesController.js";
 const { readFile, writeFile } = fs;
 
 const router = express.Router();
@@ -22,8 +22,8 @@ router.get("/", async (req, res) => {
 });
 
 router.put("/", async (req, res) => {
-    try {      
-        res.send( await editarGrades(req.body));
+    try {
+        res.send(await editarGrades(req.body));
     } catch (error) {
         console.log(error)
     }
@@ -48,12 +48,7 @@ router.get("/:id", async (req, res) => {
 
 router.get("/somaNota/:stud/:sub", async (req, res) => {
     try {
-        const data = JSON.parse(await readFile(global.fileName));
-        const filter = data.grades.filter(grade => {
-            return grade.student === req.params.stud && grade.subject === req.params.sub;
-        });
-        const sum = filter.reduce((accumulator, current) => { return accumulator + current.value }, 0);
-        res.send({ total: sum })
+        res.send({ total: await somar(req.params.stud, req.params.sub) })
     } catch (error) {
         console.log(error);
     }
@@ -61,26 +56,15 @@ router.get("/somaNota/:stud/:sub", async (req, res) => {
 
 router.get("/media/:sub/:type", async (req, res) => {
     try {
-        const data = JSON.parse(await readFile(global.fileName));
-        const filter = data.grades.filter(grade => {
-            return grade.subject === req.params.sub && grade.type === req.params.type;
-        });
-        const sum = filter.reduce((accumulator, current) => {
-            return accumulator + current.value;
-        }, 0);
-
-        const average = sum / filter.length;
-        res.send({ media: average });
+        res.send({ media: await media(req.params.sub, req.params.type) });
     } catch (error) {
         console.log(error)
     }
 });
 router.get("/bestGrade/:sub/:type", async (req, res) => {
     try {
-        const data = JSON.parse(await readFile(global.fileName));
-        const filter = data.grades.filter(grade => grade.subject === req.params.sub && grade.type === req.params.type);
-        const sort = filter.sort((a, b) => b.value - a.value);
-        res.send(sort.slice(0,3));
+        const top3 =await bestGrade(req.params.sub, req.params.type);
+        res.send(top3.slice(0, 3));
     } catch (error) {
         console.log(error)
     }
